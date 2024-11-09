@@ -9,7 +9,7 @@ export class TempDatabaseService {
     users: [],
     artists: [],
     tracks: [],
-    album: [],
+    albums: [],
     favorites: []
   }
 
