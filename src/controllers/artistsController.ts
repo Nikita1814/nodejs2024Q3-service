@@ -35,26 +35,21 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
   }
 
 
-//   @Post()
-//   create(@Body() createTrackDto: CrateTrackDto, @Res() res: Response ) {
-// /*
-//     name: string;
-//     artistId: string | null; // refers to Artist
-//     albumId: string | null; // refers to Album
-//     duration: number; // integer number
-// */
-//     if (!createTrackDto.name || !createTrackDto.artistId || !createTrackDto.albumId || createTrackDto.duration ) {
-//         res.status(HttpStatus.BAD_REQUEST).json({ message: 'Please provide all the fields for the track' });
-//         return
-//     } else {
-//     const newTrack = {
-//         id: randomUUID(),
-//         ...createTrackDto
-//     }
-//     this.dbService.database.tracks.push(newTrack);
-//     res.status(HttpStatus.CREATED).json(newTrack);
-//   }
-// }
+  @Post()
+  create(@Body() createTrackDto: CrateTrackDto, @Res() res: Response ) {
+
+    if (!createTrackDto.name || !createTrackDto.artistId || !createTrackDto.albumId || createTrackDto.duration ) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'Please provide all the fields for the track' });
+        return
+    } else {
+    const newTrack = {
+        id: randomUUID(),
+        ...createTrackDto
+    }
+    this.dbService.database.tracks.push(newTrack);
+    res.status(HttpStatus.CREATED).json(newTrack);
+  }
+}
 
 //   @Put(':id')
 //   update(@Body() updateTrackDto: UpdateTrackDto, @Res() res: Response, @Param('id') id: string ) {
