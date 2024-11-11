@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { Response } from 'express';
-import { CrateTrackDto, UpdateTrackDto } from 'src/interfaces/trackDtos';
+import { CreateAlbumDto, UpdateAlbumDto } from 'src/interfaces/albumDtos';
 import { TempDatabaseService } from 'src/services/db.service';
 
 @Controller('album')
@@ -27,7 +27,7 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
     const foundAlbum = this.dbService.database.albums.find((album) => album.id === id)
 
     if (!foundAlbum){
-        res.status(HttpStatus.NOT_FOUND).json({ message: 'track not found' });
+        res.status(HttpStatus.NOT_FOUND).json({ message: 'album not found' });
         return
     } else {
         res.status(HttpStatus.OK).json(foundAlbum);
@@ -35,52 +35,47 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
   }
 
 
-//   @Post()
-//   create(@Body() createTrackDto: CrateTrackDto, @Res() res: Response ) {
-// /*
-//     name: string;
-//     artistId: string | null; // refers to Artist
-//     albumId: string | null; // refers to Album
-//     duration: number; // integer number
-// */
-//     if (!createTrackDto.name || !createTrackDto.artistId || !createTrackDto.albumId || createTrackDto.duration ) {
-//         res.status(HttpStatus.BAD_REQUEST).json({ message: 'Please provide all the fields for the track' });
-//         return
-//     } else {
-//     const newTrack = {
-//         id: randomUUID(),
-//         ...createTrackDto
-//     }
-//     this.dbService.database.tracks.push(newTrack);
-//     res.status(HttpStatus.CREATED).json(newTrack);
-//   }
-// }
+  @Post()
+  create(@Body() createAlbumDto: CreateAlbumDto, @Res() res: Response ) {
 
-//   @Put(':id')
-//   update(@Body() updateTrackDto: UpdateTrackDto, @Res() res: Response, @Param('id') id: string ) {
+    if (!createAlbumDto.name || !createAlbumDto.year) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'Please provide all the fields for the album' });
+        return
+    } else {
+    const newAlbum = {
+        id: randomUUID(),
+        ...createAlbumDto
+    }
+    this.dbService.database.albums.push(newAlbum);
+    res.status(HttpStatus.CREATED).json(newAlbum);
+  }
+}
 
-//     if (!this.uuidRegex.test(id)){
-//         res.status(HttpStatus.BAD_REQUEST).json({ message: 'the track id sent is not a valid UUID' });
-//         return
-//     } 
-//     const foundTrack = this.dbService.database.tracks.find((track) => track.id === id);
+  @Put(':id')
+  update(@Body() updateAlbumDto: UpdateAlbumDto, @Res() res: Response, @Param('id') id: string ) {
 
-//     if (!foundTrack){
-//         res.status(HttpStatus.NOT_FOUND).json({ message: 'track not found' });
-//         return
-//     } else {
+    if (!this.uuidRegex.test(id)){
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'the album id sent is not a valid UUID' });
+        return
+    } 
+    const foundAlbum = this.dbService.database.albums.find((album) => album.id === id);
 
-//     const indexOfTrack = this.dbService.database.tracks.findIndex((track) => track.id === id);
+    if (!foundAlbum){
+        res.status(HttpStatus.NOT_FOUND).json({ message: 'album not found' });
+        return
+    } else {
+
+    const indexOfAlbum = this.dbService.database.albums.findIndex((album) => album.id === id);
     
-//     this.dbService.database.tracks[indexOfTrack] = {
-//         ...this.dbService.database.tracks[indexOfTrack],
-//         ...updateTrackDto
-//     }
+    this.dbService.database.albums[indexOfAlbum] = {
+        ...this.dbService.database.albums[indexOfAlbum],
+        ...updateAlbumDto
+    }
 
-//     res.status(HttpStatus.OK).json( this.dbService.database.tracks[indexOfTrack]);
-//     return
-//     }
-//   }
+    res.status(HttpStatus.OK).json( this.dbService.database.tracks[indexOfAlbum]);
+    return
+    }
+  }
 
   @Delete(':id')
   delete(@Res() res: Response, @Param('id') id: string ) {
@@ -98,6 +93,13 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
     }
 
     const indexOfAlbum = this.dbService.database.albums.findIndex((album) => album.id === id);
+
+    this.dbService.database.tracks = this.dbService.database.tracks.map((track) => {
+      if (track.albumId === foundAlbum.id) {
+        track.albumId = null
+      }
+      return track
+    })
 
     const sliced = this.dbService.database.albums.splice(indexOfAlbum,1)
 
