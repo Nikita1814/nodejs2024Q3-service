@@ -109,6 +109,13 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
       return album
     })
 
+
+    const indexOfArtistInFavorites = this.dbService.database.favorites.artists.findIndex((artistId) =>  artistId === id)
+
+    if(indexOfArtistInFavorites ) {
+      const slicedFavs =  this.dbService.database.favorites.artists.splice(indexOfArtistInFavorites ,1)
+    }
+
     const sliced = this.dbService.database.tracks.splice(indexOfArtist,1)
 
     // add logic for removing info from albums tracks and favorites

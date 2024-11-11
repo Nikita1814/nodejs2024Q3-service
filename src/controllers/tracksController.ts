@@ -99,6 +99,12 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
 
     const indexOfTrack = this.dbService.database.tracks.findIndex((user) => user.id === id);
 
+    const indexOfTrackInFavorites = this.dbService.database.favorites.tracks.findIndex((trackId) =>  trackId === id)
+
+    if (indexOfTrackInFavorites) {
+      const slicedFavs =  this.dbService.database.favorites.tracks.splice(indexOfTrackInFavorites,1)
+    }
+
     const sliced = this.dbService.database.tracks.splice(indexOfTrack,1)
 
     res.status(HttpStatus.NO_CONTENT).json();

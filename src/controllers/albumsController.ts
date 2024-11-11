@@ -100,7 +100,11 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
       }
       return track
     })
+    const indexOfAlbumsInFavorites = this.dbService.database.favorites.albums.findIndex((albumId) =>  albumId === id)
 
+    if(indexOfAlbumsInFavorites) {
+      const slicedFavs =  this.dbService.database.favorites.albums.splice(indexOfAlbumsInFavorites ,1)
+    }
     const sliced = this.dbService.database.albums.splice(indexOfAlbum,1)
 
     res.status(HttpStatus.NO_CONTENT).json();

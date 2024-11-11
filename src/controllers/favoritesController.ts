@@ -101,7 +101,7 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
         return
     }
 
-    const idExists = !!(this.dbService.database.artists.find( (artist) =>artist.id === id))
+    const idExists = !!(this.dbService.database.artists.find((artist) =>artist.id === id))
 
     if (!idExists){
         res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'artist with such id not found' });
@@ -111,26 +111,64 @@ uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-
     res.status(HttpStatus.CREATED).json({ message: ' Artist added to favorites!' });
 }
 
-  @Delete(':id')
-  delete(@Body() updateUserDto: UpdateUserDto, @Res() res: Response, @Param('id') id: string ) {
+  @Delete('/favs/track/:id')
+  deleteTrack(@Res() res: Response, @Param('id') id: string ) {
 
     if (!this.uuidRegex.test(id)){
-        res.status(HttpStatus.BAD_REQUEST).json({ message: 'the user id sent is not a valid UUID' });
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'the track id sent is not a valid UUID' });
         return
     }
 
-    const foundUser = this.dbService.database.users.find((user) => user.id === id);
+    const indexOfId = this.dbService.database.favorites.tracks.findIndex((trackId) =>  trackId === id);
 
-    if (!foundUser){
-        res.status(HttpStatus.NOT_FOUND).json({ message: 'User not found' });
+    if (!indexOfId){
+        res.status(HttpStatus.NOT_FOUND).json({ message: 'Favorite track not found' });
         return
     }
 
-    const indexOfUser = this.dbService.database.users.findIndex((user) => user.id === id);
+    const sliced = this.dbService.database.favorites.tracks.splice(indexOfId,1)
 
-    const sliced = this.dbService.database.users.splice(indexOfUser,1)
+    res.status(HttpStatus.NO_CONTENT).json({ message: 'Track removed from favorites' });
+  }
 
-    res.status(HttpStatus.NO_CONTENT).json();
+  @Delete('/favs/artist/:id')
+  deleteArtist(@Res() res: Response, @Param('id') id: string ) {
+
+    if (!this.uuidRegex.test(id)){
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'The artist id sent is not a valid UUID' });
+        return
+    }
+
+    const indexOfId = this.dbService.database.favorites.artists.findIndex((artistId) =>  artistId === id);
+
+    if (!indexOfId){
+        res.status(HttpStatus.NOT_FOUND).json({ message: 'Favorite artist not found' });
+        return
+    }
+
+    const sliced = this.dbService.database.favorites.artists.splice(indexOfId,1)
+
+    res.status(HttpStatus.NO_CONTENT).json({ message: 'Artist removed from favorites' });
+  }
+
+  @Delete('/favs/album/:id')
+  deleteAlbum(@Res() res: Response, @Param('id') id: string ) {
+
+    if (!this.uuidRegex.test(id)){
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'the album id sent is not a valid UUID' });
+        return
+    }
+
+    const indexOfId = this.dbService.database.favorites.albums.findIndex((albumId) => albumId === id);
+
+    if (!indexOfId){
+        res.status(HttpStatus.NOT_FOUND).json({ message: 'Favorite album not found' });
+        return
+    }
+
+    const sliced = this.dbService.database.favorites.albums.splice(indexOfId,1)
+
+    res.status(HttpStatus.NO_CONTENT).json({ message: 'Album removed from favorites' });
   }
 
 }

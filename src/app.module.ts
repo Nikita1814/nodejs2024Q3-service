@@ -6,10 +6,11 @@ import { UserController } from './controllers/usersController';
 import { TrackController } from './controllers/tracksController';
 import { AlbumController } from './controllers/albumsController';
 import { ArtistsController } from './controllers/artistsController';
+import { FavoritesController } from './controllers/favoritesController';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, TrackController, AlbumController, ArtistsController],
+  controllers: [AppController, UserController, TrackController, AlbumController, ArtistsController, FavoritesController],
   providers: [AppService, TempDatabaseService],
 })
 export class AppModule {}
