@@ -42,7 +42,7 @@ export interface TempDb {
     artists: Artist[],
     tracks: Track[],
     albums: Album[],
-    favorites: Favorites[]
+    favorites: Favorites
 
 }
 

@@ -10,7 +10,11 @@ export class TempDatabaseService {
     artists: [],
     tracks: [],
     albums: [],
-    favorites: []
+    favorites: {
+      artists: [],
+      tracks: [],
+      albums: []
+    }
   }
 
 // additem('users', {})
