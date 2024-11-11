@@ -10,7 +10,14 @@ import { FavoritesController } from './controllers/favoritesController';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, TrackController, AlbumController, ArtistsController, FavoritesController],
+  controllers: [
+    AppController,
+    UserController,
+    TrackController,
+    AlbumController,
+    ArtistsController,
+    FavoritesController,
+  ],
   providers: [AppService, TempDatabaseService],
 })
 export class AppModule {}

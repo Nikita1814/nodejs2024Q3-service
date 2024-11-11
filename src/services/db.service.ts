@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DbFields, DbValues, TempDb } from 'src/interfaces/dbInterfaces';
 
-
 @Injectable()
 export class TempDatabaseService {
-
   database: TempDb = {
     users: [],
     artists: [],
@@ -13,9 +11,9 @@ export class TempDatabaseService {
     favorites: {
       artists: [],
       tracks: [],
-      albums: []
-    }
-  }
+      albums: [],
+    },
+  };
 
-// additem('users', {})
+  // additem('users', {})
 }
